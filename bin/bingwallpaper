@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+#-*- mode: enh-ruby;-*-
+
+#
+# Sets the desktop wallpaper to the current "image of the day" from the Bing
+# search engine.
+#
+
+require "bingwallpaper"
+
+# create an instance and set the wallpaper
+bingImage = Bingwallpaper::Image.new
+
+# set the wallpaper
+begin
+  bingImage.set_today_wallpaper
+rescue Exception => exception
+  puts "Sorry, I couldn't set today's Bing Imagee of the Day Wallpaper. :'("
+  puts exception.message
+  exit 1
+end
