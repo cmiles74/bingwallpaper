@@ -14,8 +14,11 @@ nowhere else.
 
 ## Using the Script
 
-Easy-peasy, just put the script in your path and mark it
-executable. Invoke without arguments...
+Just install the gem...
+
+    gem install bingwallpaper
+
+And then invoke the script.
 
     bing-wallpaper
 
