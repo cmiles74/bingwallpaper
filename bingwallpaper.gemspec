@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Bingwallpaper::VERSION
   spec.authors       = ["cmiles74"]
   spec.email         = ["twitch@nervestaple.com"]
-  spec.summary       = %q{Write a short summary. Required.}
-  spec.description   = %q{Write a longer description. Optional.}
+  spec.summary       = %q{Sets your wallpaper to Bing's "Image of the Day"}
+  spec.description   = %q{This script downloads the "Image of the Day" and then uses Feh to set your desktop wallpaper. More information available at https://github.com/cmiles74/bingwallpaper/.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
