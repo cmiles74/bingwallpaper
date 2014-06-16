@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/bingwallpaper.svg)](http://badge.fury.io/rb/bingwallpaper)
+
 # Bing Wallpaper
 
 This project provides a simple Ruby script that will download the
