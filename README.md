@@ -24,6 +24,6 @@ And then invoke the script.
 
 
 ***
-[0]: https://www/bing.com
+[0]: https://www.bing.com
 [1]: http://feh.finalrewind.org/
 [2]: http://i3wm.org/
