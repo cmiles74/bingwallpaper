@@ -20,7 +20,7 @@ Just install the gem...
 
 And then invoke the script.
 
-    bing-wallpaper
+    bingwallpaper
 
 
 ***
