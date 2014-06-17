@@ -90,12 +90,12 @@ module Bingwallpaper
       end
     end
 
-    # Returns the file location where the image from the provided Bing image
-    # hash will be stored.
+    # Returns a Pathname with location where the image from the
+    # provided Bing image hash will be stored.
     #
     # image_data:: Hash of Bing image data
     def image_storage_path(image_data)
-      @storage_path + "/" + image_data[:file_name]
+      Pathname.new @storage_path + "/" + image_data[:file_name]
     end
 
     # Downloads the Bing image from the provided image hash.
@@ -103,32 +103,13 @@ module Bingwallpaper
     # image_date:: Hash of Bing image data
     def download_image(image_data)
 
-      open(image_storage_path(image_data), 'wb') do |file|
-        puts "Downloading: " + image_data[:links][:url]
-        file << open(image_data[:links][:url]).read
-      end
-    end
-
-    # Sets the current wallpaper to the provide File instance.
-    #
-    # file:: File instance with wallpaper data
-    def set_wallpaper(file)
-
-      puts "Setting wallpaper to " + file.path
-      `feh --bg-fill #{file.path}`
-    end
-
-    # Sets the wallpaper to Bing's "image of the day".
-    def set_today_wallpaper
-
-      image_data = parse_xml(get_data_url)
-      image_path = Pathname.new(image_storage_path(image_data[0]))
-
-      # only download the wallpaper once
-      if !image_path.exist?
-        set_wallpaper(download_image(image_data[0]))
-      else
-        puts "Today's wallpaper already downloaded. ;-)"
+      begin
+        open(image_storage_path(image_data), 'wb') do |file|
+          file << open(image_data[:links][:url]).read
+        end
+      rescue Exception => exception
+        FileUtils.rm(image_storage_path(image_data))
+        raise exception
       end
     end
   end

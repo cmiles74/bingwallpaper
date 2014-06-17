@@ -5,17 +5,40 @@
 # Sets the desktop wallpaper to the current "image of the day" from the Bing
 # search engine.
 #
-
 require "bingwallpaper"
+require "logger"
+
+# setup a logger
+logger = Logger.new(STDOUT)
+logger.formatter = proc do |severity, time, progname, msg|
+  "%-6s %s\n" % [severity, msg]
+end
 
 # create an instance and set the wallpaper
 bingImage = Bingwallpaper::Image.new
 
-# set the wallpaper
 begin
-  bingImage.set_today_wallpaper
+
+  # compute the URL for the image of the data data
+  data_url = bingImage.get_data_url
+
+  # parse image of the day data
+  image_data = bingImage.parse_xml data_url
+
+  # decide where we'll save today's image
+  image_path = bingImage.image_storage_path image_data[0]
+
+  # only download the wallpaper once
+  if !image_path.exist?
+
+    # download the image and set the wallpaper
+    bingImage.download_image image_data[0]
+   `feh --bg-fill #{image_path}`
+  else
+    logger.info "Today's wallpaper already downloaded. ;-)"
+  end
 rescue Exception => exception
-  puts "Sorry, I couldn't set today's Bing Imagee of the Day Wallpaper. :'("
-  puts exception.message
+  logger.info "Sorry, I couldn't set today's Bing Image of the Day Wallpaper. :'("
+  logger.error "The problems was: " + exception.message
   exit 1
 end
