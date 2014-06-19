@@ -26,21 +26,41 @@ begin
   image_data = bingImage.parse_xml data_url
 
   # decide where we'll save today's image
-  image_path = bingImage.image_storage_path image_data[0]
+  image_path = bingImage.image_storage_path image_data[0][:file_name]
+  fallback_image_path = bingImage.image_storage_path image_data[0][:fallback_file_name]
 
   # only download the wallpaper once
-  if !image_path.exist?
+  if !(image_path.exist? || fallback_image_path.exist?)
 
-    # download the image and set the wallpaper
-    bingImage.download_image image_data[0]
+    begin
+      # download the image and set the wallpaper
+      bingImage.download_image image_data[0]
+    rescue Exception => exception
+      logger.info "Sorry, couldn't download the image of the day. :'("
+      logger.info "I couldn't load " + image_data[0][:links][:url]
+      logger.info image_data[0]
+      logger.error "The problem was: " + exception.message
+    end
   else
     logger.info "Today's wallpaper already downloaded. ;-)"
   end
 
   # set the wallpaper
-  `feh --bg-fill #{image_path}`
+  if image_path.exist?
+
+    # set the wallpaper
+    logger.info "Wallpaper set to #{image_path}"
+    `feh --bg-fill #{image_path}`
+  else fallback_image_path.exist?
+
+    # set the wallpaper
+    logger.info "Sorry, only the low-resolution image was available today. :-("
+    logger.info "Wallpaper set to #{image_path}"
+    `feh --bg-fill #{fallback_image_path}`
+  end
 rescue Exception => exception
   logger.info "Sorry, I couldn't set today's Bing Image of the Day Wallpaper. :'("
   logger.error "The problems was: " + exception.message
+  logger.error exception.backtrace
   exit 1
 end

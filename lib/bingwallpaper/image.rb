@@ -82,10 +82,15 @@ module Bingwallpaper
         image_path = image.xpath('url').text.sub(image.xpath('url').text.rpartition("_").
                                                  last, '1920x1200.jpg')
 
+        # store the other path as fallback
+        image_fallback_path = image.xpath('url').text.to_s
+
         # build our hash of image data
         {:links => {:url => build_url(image_path),
+                    :fallback_url => image_fallback_path,
                     :copyright_url => image.xpath('copyrightlink').text},
             :file_name => Pathname.new(image_path).basename.to_s,
+            :fallback_file_name => Pathname.new(image_fallback_path).basename.to_s,
             :copyright => image.xpath('copyright').text}
       end
     end
@@ -93,9 +98,9 @@ module Bingwallpaper
     # Returns a Pathname with location where the image from the
     # provided Bing image hash will be stored.
     #
-    # image_data:: Hash of Bing image data
-    def image_storage_path(image_data)
-      Pathname.new @storage_path + "/" + image_data[:file_name]
+    # file_name:: Path to the file storage location
+    def image_storage_path(file_name)
+      Pathname.new @storage_path + "/" + file_name
     end
 
     # Downloads the Bing image from the provided image hash.
@@ -104,12 +109,22 @@ module Bingwallpaper
     def download_image(image_data)
 
       begin
-        open(image_storage_path(image_data), 'wb') do |file|
+        open(image_storage_path(image_data[:file_name]), 'wb') do |file|
           file << open(image_data[:links][:url]).read
         end
       rescue Exception => exception
-        FileUtils.rm(image_storage_path(image_data))
-        raise exception
+
+        FileUtils.rm(image_storage_path(image_data[:file_name]))
+
+        begin
+          open(image_storage_path(image_data[:fallback_file_name]), 'wb') do |file|
+            file << open(image_data[:links][:fallback_url]).read
+          end
+        rescue
+
+          FileUtils.rm(image_storage_path(image_data[:fallback_file_name]))
+          raise exception
+        end
       end
     end
   end
