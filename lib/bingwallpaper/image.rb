@@ -87,7 +87,7 @@ module Bingwallpaper
 
         # build our hash of image data
         {:links => {:url => build_url(image_path),
-                    :fallback_url => image_fallback_path,
+                    :fallback_url => build_url(image_fallback_path),
                     :copyright_url => image.xpath('copyrightlink').text},
             :file_name => Pathname.new(image_path).basename.to_s,
             :fallback_file_name => Pathname.new(image_fallback_path).basename.to_s,
@@ -98,33 +98,27 @@ module Bingwallpaper
     # Returns a Pathname with location where the image from the
     # provided Bing image hash will be stored.
     #
-    # file_name:: Path to the file storage location
+    # file_name:: Path to the file storage location'
     def image_storage_path(file_name)
       Pathname.new @storage_path + "/" + file_name
     end
 
-    # Downloads the Bing image from the provided image hash.
+    # Downloads the image at the supplied URL and saves it to the
+    # specified file.
     #
-    # image_date:: Hash of Bing image data
-    def download_image(image_data)
+    # file_path:: Path for the storing image
+    # url:: URL to the image to download
+    def download_image(file_path, url)
 
       begin
-        open(image_storage_path(image_data[:file_name]), 'wb') do |file|
-          file << open(image_data[:links][:url]).read
+
+        # download the hi-res image
+        open(file_path, 'wb') do |file|
+          file << open(url).read
         end
       rescue Exception => exception
-
-        FileUtils.rm(image_storage_path(image_data[:file_name]))
-
-        begin
-          open(image_storage_path(image_data[:fallback_file_name]), 'wb') do |file|
-            file << open(image_data[:links][:fallback_url]).read
-          end
-        rescue
-
-          FileUtils.rm(image_storage_path(image_data[:fallback_file_name]))
-          raise exception
-        end
+        file_path.delete
+        raise exception
       end
     end
   end
