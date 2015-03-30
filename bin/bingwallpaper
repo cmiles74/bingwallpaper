@@ -7,12 +7,33 @@
 #
 require "bingwallpaper"
 require "logger"
+require "optparse"
 
 # setup a logger
 logger = Logger.new(STDOUT)
 logger.formatter = proc do |severity, time, progname, msg|
   "%-6s %s\n" % [severity, msg]
 end
+
+# parse out our command-line options
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: bingwallpaper [options]"
+
+  opts.on("-g", "--gnome", "Set Gnome background") do |g|
+    options[:gnome] = g
+  end
+
+  opts.on("-f", "--feg", "Use feh to set the  background (the default)") do |f|
+    options[:feh] = f
+  end
+
+  opts.on("-h", "--help", "Prints this help") do
+    puts opts
+    exit
+  end
+end.parse!
 
 # create an instance and set the wallpaper
 bingImage = Bingwallpaper::Image.new
@@ -59,13 +80,27 @@ begin
 
     # set the wallpaper
     logger.info "Wallpaper set to #{image_path}"
-    `feh --bg-fill #{image_path}`
+
+    if options[:gnome]
+      logger.info "Setting background with Gnome"
+      `gsettings set org.gnome.desktop.background picture-uri "file:///#{image_path}"`
+    else
+      logger.info "Setting background with feh"
+      `feh --bg-fill #{image_path}`
+    end
   elsif fallback_image_path.exist?
 
     # set the wallpaper
     logger.info "Only the low-resolution image was available today."
     logger.info "Wallpaper set to #{image_path}"
-    `feh --bg-fill #{fallback_image_path}`
+
+    if options[:gnome]
+      logger.info "Setting background with Gnome"
+      `gsettings set org.gnome.desktop.background picture-uri "file:///#{fallback_image_path}"`
+    else
+      logger.info "Setting background with feh"
+      `feh --bg-fill #{fallback_image_path}`
+    end
   else
 
     logger.info "Sorry, I couldn't download the Bing Image of the Day. :'("
