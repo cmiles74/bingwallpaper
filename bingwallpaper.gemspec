@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["cmiles74"]
   spec.email         = ["twitch@nervestaple.com"]
   spec.summary       = %q{Sets your wallpaper to Bing's "Image of the Day"}
-  spec.description   = %q{This script downloads the "Image of the Day" and then uses Feh to set your desktop wallpaper. More information available at https://github.com/cmiles74/bingwallpaper/.}
+  spec.description   = %q{This script downloads the "Image of the Day" and then uses Feh or Gnome to set your desktop wallpaper. More information available at https://github.com/cmiles74/bingwallpaper/.}
   spec.homepage      = ""
   spec.license       = "MIT"
 

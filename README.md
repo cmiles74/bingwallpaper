@@ -9,10 +9,10 @@ wallpaper.
 ## How It Works
 
 I wrote this script with my own environment in mind, so it's pretty
-simple-minded. It fetches the XML describing today's image, then
-fetches the  1920x1200 sized version. Lastly, it uses [Feh][1] to set
-the wallpaper for your environment. I've tested it in [i3][2] and
-nowhere else.
+simple-minded. It fetches the XML describing today's image, then fetches
+the 1920x1200 sized version. Lastly, it uses [Feh][1] or Gnome to set
+the wallpaper for your environment. I've tested it in [i3][2] and Gnome
+3.14.2 and nowhere else.
 
 ## Using the Script
 
