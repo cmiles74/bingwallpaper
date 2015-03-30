@@ -25,6 +25,10 @@ OptionParser.new do |opts|
     options[:gnome] = g
   end
 
+  opts.on("-l", "--lock", "Set Gnome lock screen background") do |g|
+    options[:lock] = g
+  end
+
   opts.on("-f", "--feg", "Use feh to set the  background (the default)") do |f|
     options[:feh] = f
   end
@@ -88,6 +92,11 @@ begin
       logger.info "Setting background with feh"
       `feh --bg-fill #{image_path}`
     end
+
+    if options[:lock]
+      logger.info "Setting lock background with Gnome"
+      `gsettings set org.gnome.desktop.screensaver picture-uri "file:///#{image_path}"`
+    end
   elsif fallback_image_path.exist?
 
     # set the wallpaper
@@ -100,6 +109,11 @@ begin
     else
       logger.info "Setting background with feh"
       `feh --bg-fill #{fallback_image_path}`
+    end
+
+    if options[:lock]
+      logger.info "Setting lock background with Gnome"
+      `gsettings set org.gnome.desktop.screensaver picture-uri "file:///#{fallback_image_path}"`
     end
   else
 
