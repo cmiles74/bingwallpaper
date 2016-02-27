@@ -8,6 +8,7 @@
 require "bingwallpaper"
 require "logger"
 require "optparse"
+require "yaml"
 
 # setup a logger
 logger = Logger.new(STDOUT)
@@ -42,6 +43,18 @@ end.parse!
 # create an instance and set the wallpaper
 bingImage = Bingwallpaper::Image.new
 
+# bail out if we've already downloaded today's image
+downloaded_data_path = bingImage.image_storage_path ".bingwallpaper"
+if File.exist? downloaded_data_path
+
+  downloaded_data = YAML.load_file downloaded_data_path
+  if downloaded_data[:downloaded] == Date.today
+
+    logger.info "Image of the day already downloaded and set"
+    exit 0
+  end
+end
+
 begin
 
   # compute the URL for the image of the data data
@@ -54,12 +67,20 @@ begin
   image_path = bingImage.image_storage_path image_data[0][:file_name]
   fallback_image_path = bingImage.image_storage_path image_data[0][:fallback_file_name]
 
+  # path of the downloaded file
+  downloaded_data = nil
+
   # try the hi-res image
   if !image_path.exist?
 
     begin
 
       bingImage.download_image image_path, image_data[0][:links][:url]
+      downloaded_data = {
+        :path => image_path,
+        :quality => :high,
+        :downloaded => Date.today
+      }
     rescue Exception => exception
       logger.info "I couldn't download the hi-resolution image of the day..."
       logger.info "I couldn't load " + image_data[0][:links][:url]
@@ -73,9 +94,21 @@ begin
     begin
 
       bingImage.download_image fallback_image_path, image_data[0][:links][:fallback_url]
+      downloaded_data = {
+        :path => fallback_image_path,
+        :quality => :low,
+        :downloaded => Date.today
+      }
     rescue Exception => exception
       logger.info "I couldn't download the low-resolution image of the day..."
       logger.info "I couldn't load " + image_data[0][:links][:url]
+    end
+  end
+
+  # update our downloaded data
+  if downloaded_data
+    File.open(downloaded_data_path, "w+") do |file_out| 
+      file_out.write downloaded_data.to_yaml
     end
   end
 
@@ -124,3 +157,5 @@ rescue Exception => exception
   logger.error "The problems was: " + exception.message
   exit 1
 end
+
+exit 0
