@@ -45,7 +45,8 @@ module Bingwallpaper
     # market:: The market to use when fetching
     # index:: Index of the image to fetch (0 = today)
     # storage_path:: Path to directory for storing images
-    def initialize(market = DEFAULT_MARKET, index = DEFAULT_INDEX, storage_path = DEFAULT_STORAGE_PATH)
+    def initialize(market = DEFAULT_MARKET, index = DEFAULT_INDEX,
+                   storage_path = DEFAULT_STORAGE_PATH)
 
       @market = market
       @index = index
@@ -66,7 +67,8 @@ module Bingwallpaper
     # Returns the data URL for the image of the day.
     def get_data_url
 
-      return build_url(PATH + '?format=' + FORMAT + '&idx=' + @index.to_s + '&n=1' + '&mkt=' + @market)
+      return build_url(PATH + '?format=' + FORMAT + '&idx=' + @index.to_s +
+                       '&n=1' + '&mkt=' + @market)
     end
 
     # Parses the XML data and returns a hash of image information.
@@ -79,8 +81,8 @@ module Bingwallpaper
       doc.xpath('//images/image').map do |image|
 
         # figure out the hi-res image path
-        image_path = image.xpath('url').text.sub(image.xpath('url').text.rpartition("_").
-                                                 last, '1920x1200.jpg')
+        image_path = image.xpath('url').text.sub(
+          image.xpath('url').text.rpartition("_").last, '1920x1200.jpg')
 
         # store the other path as fallback
         image_fallback_path = image.xpath('url').text.to_s
