@@ -7,6 +7,11 @@ This project provides a simple Ruby script that will download the
 "Image of the Day" from [Bing][0] and then sets it as your current
 wallpaper.
 
+If you find this code useful in any way, please feel free to...
+
+<a href="https://www.buymeacoffee.com/cmiles74" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+
+
 ## How It Works
 
 I wrote this script with my own environment in mind, so it's pretty
