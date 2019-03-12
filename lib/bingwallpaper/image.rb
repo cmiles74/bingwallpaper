@@ -91,10 +91,23 @@ module Bingwallpaper
         {:links => {:url => build_url(image_path),
                     :fallback_url => build_url(image_fallback_path),
                     :copyright_url => image.xpath('copyrightlink').text},
-            :file_name => Pathname.new(image_path).basename.to_s,
+            :file_name => cleanup_filename(Pathname.new(image_path).basename.to_s),
             :fallback_file_name => Pathname.new(image_fallback_path).basename.to_s,
             :copyright => image.xpath('copyright').text}
       end
+    end
+
+    # Parses out a nice filename from the icky URL.
+    #
+    # filename:: Filename from the URL
+    def cleanup_filename(filename)
+      matches = /[A-Za-z0-9_-]+\.jpg/.match(filename)
+
+      if matches.length > 0
+        return matches[0]
+      end
+
+      return filename
     end
 
     # Returns a Pathname with location where the image from the

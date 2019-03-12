@@ -1,3 +1,4 @@
+
 [![Gem Version](https://badge.fury.io/rb/bingwallpaper.svg)](http://badge.fury.io/rb/bingwallpaper)
 
 # Bing Wallpaper
