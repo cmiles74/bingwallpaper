@@ -34,6 +34,10 @@ OptionParser.new do |opts|
     options[:feh] = f
   end
 
+  opts.on("-s", "--sway", "Use swaymsg to set the background, overwrite ~/.config/sway/config.d/wallpaper") do |s|
+    options[:sway] = s
+  end
+
   opts.on("-h", "--help", "Prints this help") do
     puts opts
     exit
@@ -121,6 +125,10 @@ begin
     if options[:gnome]
       logger.info "Setting background with Gnome"
       `gsettings set org.gnome.desktop.background picture-uri "file:///#{image_path}"`
+    elsif options[:sway]
+      logger.info "Setting background with swaymsg"
+      `swaymsg output "*" background #{image_path} fill`
+      `echo 'swaysmg output "*" background #{image_path} fill' > ~/.config/sway/config.d/wallpaper`
     else
       logger.info "Setting background with feh"
       `feh --bg-fill #{image_path}`
@@ -139,6 +147,10 @@ begin
     if options[:gnome]
       logger.info "Setting background with Gnome"
       `gsettings set org.gnome.desktop.background picture-uri "file:///#{fallback_image_path}"`
+    elsif options[:sway]
+      logger.info "Setting background with swaymsg"
+      `swaymsg output "*" background #{fallback_image_path} fill`
+      `echo 'swaysmg output "*" background #{fallback_image_path} fill' > ~/.config/sway/config.d/wallpaper`
     else
       logger.info "Setting background with feh"
       `feh --bg-fill #{fallback_image_path}`
