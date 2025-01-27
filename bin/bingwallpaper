@@ -51,7 +51,7 @@ bingImage = Bingwallpaper::Image.new
 downloaded_data_path = bingImage.image_storage_path ".bingwallpaper"
 if File.exist? downloaded_data_path
 
-  downloaded_data = YAML.load_file downloaded_data_path
+  downloaded_data = YAML.unsafe_load_file downloaded_data_path
   if downloaded_data[:downloaded] == Date.today
 
     logger.info "Image of the day already downloaded and set"
