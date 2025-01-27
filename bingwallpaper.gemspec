@@ -18,12 +18,15 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = '~> 2.5.0'
-  spec.add_dependency "nokogiri", "~> 1.8.2"
-  spec.add_dependency "OptionParser", "~> 0.5.1"
-  spec.add_development_dependency "bundler", "~> 1.6"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "pry", "~> 0.10.3"
-  spec.add_development_dependency "pry-doc", ">= 0.8.0"
-  spec.add_development_dependency "method_source", ">= 0.8.2"
+  spec.required_ruby_version = '~> 3.2'
+  spec.add_dependency 'logger', '~> 1.6'
+  spec.add_dependency 'nokogiri', '~> 1.18'
+  spec.add_dependency 'OptionParser', '~> 0.5.1'
+  spec.add_development_dependency 'bundler', '~> 2.5'
+  spec.add_development_dependency 'rake', '~> 13.2'
+  spec.add_development_dependency 'pry', '~> 0.15'
+  spec.add_development_dependency 'pry-doc', '~> 1.5'
+  spec.add_development_dependency 'method_source', '~> 1.0'
+  spec.add_development_dependency 'irb', '~> 1.14.3'
+  spec.add_development_dependency 'ostruct', '~> 0.6.1'
 end

@@ -58,7 +58,7 @@ module Bingwallpaper
 
     # Constructs a full path for the provided partial URL.
     #
-    # partial:: the end of the target URL
+    # partial:: the end of the target URLm
     def build_url(partial)
 
       return PROTO + DOMAIN + partial
@@ -76,7 +76,7 @@ module Bingwallpaper
     # url:: complete path to the Bing image of the day
     def parse_xml(url)
 
-      doc = Nokogiri::HTML(open(url))
+      doc = Nokogiri::HTML(URI.open(url))
 
       doc.xpath('//images/image').map do |image|
 
@@ -129,7 +129,7 @@ module Bingwallpaper
 
         # download the hi-res image
         open(file_path, 'wb') do |file|
-          file << open(url).read
+          file << URI.open(url).read
         end
       rescue Exception => exception
         file_path.delete
