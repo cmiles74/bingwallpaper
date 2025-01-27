@@ -31,9 +31,9 @@ And then invoke the script like so to set your wallpaper and lock screen to the
 Bing Picture of the Day in Gnome.
 
     bingwallpaper -g -l
-    
+
 Here's the usage information...
-    
+
 ```
 Usage: bingwallpaper [options]
     -g, --gnome                      Set Gnome background
@@ -44,8 +44,7 @@ Usage: bingwallpaper [options]
     -h, --help                       Prints this help
 ```
 
-
-***
+----
 [0]: https://www.bing.com
 [1]: http://feh.finalrewind.org/
 [2]: http://i3wm.org/

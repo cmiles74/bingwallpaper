@@ -111,8 +111,8 @@ begin
 
   # update our downloaded data
   if downloaded_data
-    File.open(downloaded_data_path, "w+") do |file_out| 
-      file_out.write downloaded_data.to_yaml
+    File.open(downloaded_data_path, "w+") do |file_out|
+      file_out.write YAML.dump(downloaded_data)
     end
   end
 

@@ -58,7 +58,7 @@ module Bingwallpaper
 
     # Constructs a full path for the provided partial URL.
     #
-    # partial:: the end of the target URL
+    # partial:: the end of the target URLm
     def build_url(partial)
 
       return PROTO + DOMAIN + partial
