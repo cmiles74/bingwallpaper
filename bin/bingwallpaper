@@ -61,7 +61,6 @@ if File.exist? downloaded_data_path
 
   downloaded_data = YAML.unsafe_load_file downloaded_data_path
   if downloaded_data[:downloaded] == Date.today
-
     logger.info "Image of the day already downloaded and set"
   end
 end
@@ -102,6 +101,8 @@ begin
   # fallback to the low-res image
   if !image_path.exist? && !fallback_image_path.exist?
 
+    logger.info "Falling back to the low-resolution image..."
+
     begin
 
       bingImage.download_image fallback_image_path, image_data[0][:links][:fallback_url]
@@ -126,11 +127,8 @@ begin
   # set the wallpaper
   if image_path.exist?
 
-    # set the wallpaper
-    logger.info "Wallpaper set to #{image_path}"
-
     if options[:down]
-      logger.info "Downloading new background image only"
+      logger.info "Returning background image path only"
       puts(image_path)
     elsif options[:gnome]
       logger.info "Setting background with Gnome"
@@ -142,9 +140,11 @@ begin
     elsif options[:hypr]
       logger.info "Setting background with Hyprpaper"
       `hyprctl hyprpaper reload ,#{image_path}`
-    else
+    elsif options[:feh]
       logger.info "Setting background with feh"
       `feh --bg-fill #{image_path}`
+    else
+      logger.info "Unknown option, no background is being set"
     end
 
     if options[:lock]
@@ -153,20 +153,24 @@ begin
     end
   elsif fallback_image_path.exist?
 
-    # set the wallpaper
-    logger.info "Only the low-resolution image was available today."
-    logger.info "Wallpaper set to #{image_path}"
-
-    if options[:gnome]
+    if options[:down]
+      logger.info "Returning background image path only"
+      puts(fallback_image_path)
+    elsif options[:gnome]
       logger.info "Setting background with Gnome"
       `gsettings set org.gnome.desktop.background picture-uri "file:///#{fallback_image_path}"`
     elsif options[:sway]
       logger.info "Setting background with swaymsg"
       `swaymsg output "*" background #{fallback_image_path} fill`
       `echo 'exec swaymsg output "*" background #{fallback_image_path} fill' > ~/.config/sway/config.d/wallpaper`
-    else
+    elsif options[:hypr]
+      logger.info "Setting background with Hyprpaper"
+      `hyprctl hyprpaper reload ,#{fallback_image_path}`
+    elsif options[:feh]
       logger.info "Setting background with feh"
       `feh --bg-fill #{fallback_image_path}`
+    else
+      logger.info "Unknown option, no background is being set"
     end
 
     if options[:lock]
