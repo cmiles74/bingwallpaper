@@ -14,12 +14,9 @@ If you find this code useful in any way, please feel free to...
 
 ## How It Works
 
-I wrote this script with my own environment in mind, so it's pretty
-simple-minded. It fetches the XML describing today's image, then fetches the
-1920x1200 sized version if it's available, the lower resolution version if not.
-Lastly, it uses [Feh][1], [swaymsg][3] or Gnome to set the wallpaper for your
-environment. I've tested it in [i3][2], [Sway][4] and Gnome 3.14.2 and nowhere
-else.
+I wrote this script with my own environment in mind, so it's pretty simple-minded. It fetches the XML describing today's image, then fetches the 1920x1200 sized version if it's available, the lower resolution version if not. Lastly, it uses [Feh][1], [swaymsg][3], [hyprpaper][5] or Gnome to set the wallpaper for your environment. I've tested it in [i3][2], [Sway][4] and Gnome 3.14.2 and nowhere else.
+
+You can also have it download the file and return the path on standard out so that you can work it into a script of your own. 😉
 
 ## Using the Script
 
@@ -36,11 +33,12 @@ Here's the usage information...
 
 ```
 Usage: bingwallpaper [options]
+    -d, --down                       Download only, return path to image
     -g, --gnome                      Set Gnome background
-    -l, --lock                       Set Gnome lock screen background
-    -f, --feg                        Use feh to set the  background (the default)
-    -s, --sway                       Use swaymsg to set the background, overwrite \
-                                       ~/.config/sway/config.d/wallpaper
+        --lock                       Set Gnome lock screen background
+    -f, --feh                        Use feh to set the  background (the default)
+    -s, --sway                       Use swaymsg to set the background, overwrite ~/.config/sway/config.d/wallpaper
+    -l, --hypr                       Use Hyprpaper to set the  background
     -h, --help                       Prints this help
 ```
 
@@ -50,3 +48,4 @@ Usage: bingwallpaper [options]
 [2]: http://i3wm.org/
 [3]: https://github.com/swaywm/sway/blob/master/swaymsg/swaymsg.1.scd
 [4]: https://swaywm.org/
+[5]: https://wiki.hypr.land/Hypr-Ecosystem/hyprpaper/
